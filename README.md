@@ -66,6 +66,20 @@ Invoke-RestMethod -Uri "$($d.endpoint)/token" `
     -Body '{"scopes":["https://management.azure.com/.default"]}'
 ```
 
+### NUnit / C# Dev Kit Test Explorer
+
+When running tests via the **C# Dev Kit Test Explorer** (rather than `dotnet test` from the terminal), VS Code does not automatically apply your `tests.runsettings` file. This means environment variables such as `EXECUTION_ENVIRONMENT` are not set, and the wrong settings file (and Key Vault URL) may be used.
+
+Add the following to your workspace `.vscode/settings.json` to ensure Test Explorer always picks up the correct run settings:
+
+```json
+{
+  "dotnet.unitTests.runSettingsPath": "${workspaceFolder}/tests.runsettings"
+}
+```
+
+> **Note:** `${workspaceFolder}` resolves to the root of the workspace folder. Adjust the path if your `.runsettings` file lives elsewhere.
+
 ## Use from .NET
 
 ### Windows — no NuGet package required

@@ -10,21 +10,41 @@
 $ErrorActionPreference = 'Stop'
 
 # -- Parse arguments --------------------------------------------------------------
+# AzureServiceTokenProvider (Microsoft.Azure.Services.AppAuthentication) appends
+# resource and tenantId as positional args after the Arguments array in tokenprovider.json:
+#   powershell.exe ... -File script.ps1 "<resource>" "<tenantId>"
+#
+# Some callers (e.g. Azure.Identity VisualStudioCredential) use named flags instead:
+#   --resource <resource> --tenant <tenantId>
+#
+# We accept both styles.
 $resource = ''
 $tenant   = ''
+$positional = [System.Collections.Generic.List[string]]::new()
 $i = 0
 while ($i -lt $args.Count) {
-    if ($args[$i] -eq '--resource') {
-        if (($i + 1) -lt $args.Count) { $resource = $args[$i + 1]; $i += 2 } else { $i++ }
-    } elseif ($args[$i] -eq '--tenant') {
-        if (($i + 1) -lt $args.Count) { $tenant = $args[$i + 1]; $i += 2 } else { $i++ }
-    } else {
-        $i++
+    switch ($args[$i]) {
+        '--resource' {
+            if (($i + 1) -lt $args.Count) { $resource = $args[$i + 1]; $i += 2 }
+            else { $i++ }
+        }
+        '--tenant' {
+            if (($i + 1) -lt $args.Count) { $tenant = $args[$i + 1]; $i += 2 }
+            else { $i++ }
+        }
+        default {
+            $positional.Add($args[$i])
+            $i++
+        }
     }
 }
 
+# Fall back to positional arguments when named flags were not supplied
+if (-not $resource -and $positional.Count -ge 1) { $resource = $positional[0] }
+if (-not $tenant   -and $positional.Count -ge 2) { $tenant   = $positional[1] }
+
 if (-not $resource) {
-    [Console]::Error.WriteLine('VSCodeTokenProvider: --resource argument is required')
+    [Console]::Error.WriteLine('VSCodeTokenProvider: resource argument is required')
     exit 1
 }
 
