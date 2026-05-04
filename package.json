@@ -2,7 +2,7 @@
   "name": "vscode-azure-service-auth",
   "displayName": "Azure Service Authentication",
   "description": "Pick a signed-in Microsoft account and share it with .NET tests via Azure.Identity, like Visual Studio's Azure Service Authentication.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "slobodan-dusanic",
   "repository": {
     "type": "git",
