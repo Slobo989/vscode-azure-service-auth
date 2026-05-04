@@ -1,0 +1,52 @@
+{
+  "name": "vscode-azure-service-auth",
+  "displayName": "Azure Service Authentication",
+  "description": "Pick a signed-in Microsoft account and share it with .NET tests via Azure.Identity, like Visual Studio's Azure Service Authentication.",
+  "version": "0.1.0",
+  "publisher": "slobodan-dusanic",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Slobo989/vscode-azure-service-auth"
+  },
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "azure",
+    "authentication",
+    "identity",
+    "dotnet",
+    "testing"
+  ],
+  "icon": "images/icon.png",
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "azureServiceAuth.selectAccount",
+        "title": "Azure Service Authentication: Select Account"
+      },
+      {
+        "command": "azureServiceAuth.signOut",
+        "title": "Azure Service Authentication: Clear Selected Account"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./"
+  },
+  "devDependencies": {
+    "@types/node": "^25.6.0",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^6.0.3"
+  }
+}
